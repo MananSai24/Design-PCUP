@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusMate - Stay Productive</title>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js for analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-logo">
+            <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="FocusMate Logo" class="logo">
+            <span class="logo-text">FocusMate</span>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Welcome to FocusMate</h1>
+            <p>Your journey to enhanced productivity begins here. Stay focused, maintain balance, and remember: every small step towards your goals counts. Let's make today count!</p>
+        </div>
+        
+        <!-- Main Grid Layout -->
+        <div class="grid">
+            <!-- Website Blacklist Card -->
+            <div class="card">
+                <h2>Website Blacklisting</h2>
+                <p>Enter websites to blacklist them during focus sessions and in general. Blacklisted websites will be blocked at all times, helping you stay focused.</p>
+                
+                <form id="blacklist-form" class="blacklist-form">
+                    <input type="text" id="website-input" placeholder="Enter website URL">
+                    <button type="button" id="add-to-blacklist">Add to Blacklist</button>
+                </form>
+                
+                <div id="blacklisted-websites" class="card-content">
+                    <!-- Blacklisted websites will be displayed here -->
+                </div>
+            </div>
+            
+            <!-- Customizable Schedules Card -->
+            <div class="card">
+                <h2>Customizable Schedules</h2>
+                <p>Set your daily focus schedule by selecting start and end times. During these hours, blacklisted websites will be automatically blocked. Outside these hours, blacklisted sites will be accessible.</p>
+                
+                <form id="schedule-form" class="schedule-form">
+                    <div class="time-input">
+                        <label for="start-time">Start Time</label>
+                        <input type="time" id="start-time">
+                    </div>
+                    
+                    <div class="time-input">
+                        <label for="end-time">End Time</label>
+                        <input type="time" id="end-time">
+                    </div>
+                    
+                    <button type="button" id="save-schedule" class="btn-primary">Save Schedule</button>
+                </form>
+            </div>
+            
+            <!-- Analytics Card -->
+            <div class="card">
+                <h2>Analytics</h2>
+                <p>Track your daily focus time throughout the week. The chart updates automatically and persists your data even when you close the application.</p>
+                
+                <div class="analytics-chart" id="analytics-chart-container">
+                    <canvas id="analytics-chart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Focus Timer Card -->
+            <div class="card">
+                <h2>Focus Timer</h2>
+                <p>Set your work and break durations, then use the timer to maintain focused work sessions. The alarm will notify you when it's time to switch modes.</p>
+                
+                <div class="timer-controls">
+                    <button id="work-btn" class="timer-btn work-btn">Work</button>
+                    <button id="break-btn" class="timer-btn break-btn">Break</button>
+                </div>
+                
+                <div class="duration-controls">
+                    <div class="duration-control">
+                        <label for="work-duration">Customize Work Duration</label>
+                        <div class="duration-input-container">
+                            <input type="number" id="work-duration" min="1" value="25">
+                            <span>minutes</span>
+                        </div>
+                        <small>Set your work session length</small>
+                    </div>
+                    
+                    <div class="duration-control">
+                        <label for="break-duration">Customize Break Duration</label>
+                        <div class="duration-input-container">
+                            <input type="number" id="break-duration" min="1" value="5">
+                            <span>minutes</span>
+                        </div>
+                        <small>Set your break length</small>
+                    </div>
+                </div>
+                
+                <div class="timer-display" id="timer-display">25:00</div>
+                
+                <div class="timer-actions">
+                    <button id="play-pause-btn" class="play-pause-btn">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button id="stop-btn" class="stop-btn">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                </div>
+                
+                <div class="sound-toggle">
+                    <label class="switch">
+                        <input type="checkbox" id="sound-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span>Sound notifications</span>
+                </div>
+                
+                <!-- Task List -->
+                <div class="task-list">
+                    <h3>Task List</h3>
+                    
+                    <form id="task-form" class="task-form">
+                        <input type="text" id="task-input" placeholder="Add a new task">
+                        <button type="button" id="add-task-btn" class="btn-primary">Add</button>
+                    </form>
+                    
+                    <div id="task-list" class="tasks">
+                        <!-- Tasks will be displayed here -->
+                    </div>
+                    <div class="clear-tasks-container">
+                        <button id="clear-tasks-btn" class="clear-tasks-btn">
+                            <i class="fas fa-trash"></i> Clear All Tasks
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/website_blocker.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/schedules.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/timer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/tasks.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
